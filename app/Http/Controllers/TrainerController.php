@@ -36,6 +36,8 @@ class TrainerController extends Controller
      */
     public function store(Request $request)
     {
+        $pass = false;
+        $trainers = Trainer::all();
         //return $request->input('name');
         //return $request->all();
         if($request->hasFile('avatar')){
@@ -43,13 +45,24 @@ class TrainerController extends Controller
           $name = time().$file->getClientOriginalName();
           $file->move(public_path().'/images/', $name);
         }
+
         $trainer = new Trainer();
         $trainer->name = $request->input('name');
         $trainer->avatar = $name;
         $trainer->description = $request->input('description');
-        $trainer->save();
-        $trainers = Trainer::all();
-        return view('trainers.index', compact('trainers'));
+        foreach ($trainers as $check) {
+          if ($check->name == $trainer->name) {
+            $pass = true;
+          }
+        }
+        if(!$pass){
+          $trainer->save();
+          $trainers = Trainer::all();
+          return view('trainers.index', compact('trainers'));
+        }else{
+          return 'Nombres iguales.';
+        }
+
     }
 
     /**
