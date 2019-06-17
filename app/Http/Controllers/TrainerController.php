@@ -50,6 +50,7 @@ class TrainerController extends Controller
         $trainer->name = $request->input('name');
         $trainer->avatar = $name;
         $trainer->description = $request->input('description');
+        $trainer->slug = $request->input('slug');
         foreach ($trainers as $check) {
           if ($check->name == $trainer->name) {
             $pass = true;
@@ -73,7 +74,7 @@ class TrainerController extends Controller
      */
     public function show(Trainer $trainer)
     {
-        //$trainer = Trainer:: find($id);
+        //$trainer = Trainer::where('slug', '=', $slug)->firstOrFail();
         return view('trainers.show', compact('trainer'));
     }
 
@@ -83,9 +84,9 @@ class TrainerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Trainer $trainer)
     {
-        //
+        return view('trainers.edit', compact('trainer'));
     }
 
     /**
@@ -95,9 +96,17 @@ class TrainerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Trainer $trainer)
     {
-        //
+        $trainer->fill($request->except('avatar'));
+        if($request->hasFile('avatar')){
+          $file = $request->file('avatar');
+          $name = time().$file->getClientOriginalName();
+          $trainer->avatar = $name;
+          $file->move(public_path().'/images/', $name);
+        }
+        $trainer->save();
+        return view('trainers.edit', compact('trainer'));
     }
 
     /**
