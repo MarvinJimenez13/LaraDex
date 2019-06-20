@@ -4,6 +4,7 @@ namespace LaraDex\Http\Controllers;
 
 use Illuminate\Http\Request;
 use LaraDex\Trainer;
+use LaraDex\Http\Requests\StoreTrainerRequest;
 
 class TrainerController extends Controller
 {
@@ -34,35 +35,36 @@ class TrainerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTrainerRequest $request)
     {
-        $pass = false;
-        $trainers = Trainer::all();
+
         //return $request->input('name');
         //return $request->all();
+      /*  $validateData = $request->validate([
+          'name' => 'required|max:10',
+          'avatar' => 'required|image',
+          'description' => 'required',
+          'slug' => 'required'
+        ]);*/
+
+
+          $trainer = new Trainer();
         if($request->hasFile('avatar')){
           $file = $request->file('avatar');
           $name = time().$file->getClientOriginalName();
+          $trainer->avatar = $name;
           $file->move(public_path().'/images/', $name);
         }
 
-        $trainer = new Trainer();
+
         $trainer->name = $request->input('name');
-        $trainer->avatar = $name;
         $trainer->description = $request->input('description');
         $trainer->slug = $request->input('slug');
-        foreach ($trainers as $check) {
-          if ($check->name == $trainer->name) {
-            $pass = true;
-          }
-        }
-        if(!$pass){
-          $trainer->save();
-          $trainers = Trainer::all();
-          return view('trainers.index', compact('trainers'));
-        }else{
-          return 'Nombres iguales.';
-        }
+
+        $trainer->save();
+        $trainers = Trainer::all();
+        return view('trainers.index', compact('trainers'));
+
 
     }
 
