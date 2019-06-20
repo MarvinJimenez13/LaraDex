@@ -5,26 +5,7 @@
 @section('content')
 
   {!! Form::open(['route' => 'trainers.store', 'method' => 'POST', 'files' => true]) !!}
-  <div class="form-group">
-    {!! Form::label('name', 'Nombre') !!}
-    {!! Form::text('name', null, ['class' => 'form-control']) !!}
-  </div>
-
-  <div class="form-group">
-    {!! Form::label('avatar', 'Avatar') !!}
-    {!! Form::file('avatar') !!}
-  </div>
-
-  <div class="form-group">
-    {!! Form::label('slug', 'Slug') !!}
-    {!! Form::text('slug', null, ['class' => 'form-control']) !!}
-  </div>
-
-  <div class="form-group">
-    {!! Form::label('description', 'Descripción') !!}
-    {!! Form::text('description', null, ['class' => 'form-control']) !!}
-  </div>
-
+  @include('trainers.form')
   {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
   {!! Form::close() !!}
 
