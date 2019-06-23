@@ -3,8 +3,10 @@
 @section('title', 'Trainers Edit')
 
 
-//también puedo utilizar laravel collective con metodo put y todo :P
-@section('content')
+<!--también puedo utilizar laravel collective con metodo put y todo :P-->
+@include('common.success')
+
+@include('common.errors')
   <form class="form-group" action="/trainers/{{$trainer->slug }}" method="POST" enctype="multipart/form-data">
     @method('PUT')
     @csrf

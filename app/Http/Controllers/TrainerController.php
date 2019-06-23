@@ -108,7 +108,8 @@ class TrainerController extends Controller
           $file->move(public_path().'/images/', $name);
         }
         $trainer->save();
-        return view('trainers.edit', compact('trainer'));
+        return redirect()->route('trainers.edit' ,[$trainer])->with('status', 'Entrenador actualizado.');
+        //return view('trainers.edit', compact('trainer'))->with('status', 'Entrenador actualizado.');
     }
 
     /**
